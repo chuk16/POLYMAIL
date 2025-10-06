@@ -93,33 +93,5 @@ def about():
 def contact():
     return render_template("contact.html")
 
-
-# NEW: AJAX endpoint for contact form
-@app.route("/send_contact", methods=["POST"])
-def send_contact():
-    data = request.json
-    name = data.get("name", "").strip()
-    email = data.get("email", "").strip()
-    message = data.get("message", "").strip()
-
-    if not name or not email or not message:
-        return jsonify({"error": "All fields are required."}), 400
-
-    body = f"Name: {name}\nEmail: {email}\nMessage:\n{message}"
-    msg = MIMEText(body)
-    msg['Subject'] = 'New Contact Form Message'
-    msg['From'] = GMAIL_ADDRESS
-    msg['To'] = GMAIL_ADDRESS
-
-    try:
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-            server.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
-            server.send_message(msg)
-        return jsonify({"success": "Message sent successfully!"})
-
-    except Exception as e:
-        return jsonify({"error": f"Failed to send email: {str(e)}"}), 500
-
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=81)
