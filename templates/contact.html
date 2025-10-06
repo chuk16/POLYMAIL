@@ -29,68 +29,8 @@
   <section class="translator-section">
     <h3>Get in Touch</h3>
     <p style="margin-bottom:2rem;">We’d love to hear from you! Whether you have questions, feedback, or need support, you can reach us here:</p>
-    <p><strong>Email:</strong> polymail.ai@gmail.com</p>
-
-    <h3 style="margin-top:2rem;">Send a Message</h3>
-    <form id="contactForm" style="display:flex; flex-direction:column; gap:1rem; max-width:600px; margin:0 auto;">
-      <input type="text" id="name" placeholder="Your Name" required>
-      <input type="email" id="email" placeholder="Your Email" required>
-      <textarea id="message" placeholder="Your Message" required style="height:150px;"></textarea>
-      <button type="submit" class="cta">Send Message</button>
-      <p id="formFeedback" style="margin-top:0.5rem; color:green; display:none;"></p>
-    </form>
+    <p><strong>Email:</strong> <a href="mailto:polymail.ai@gmail.com">polymail.ai@gmail.com</a></p>
   </section>
 
-  <!-- AJAX SCRIPT -->
-  <script>
-  document.getElementById("contactForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    const feedbackEl = document.getElementById("formFeedback");
-    feedbackEl.style.display = "none";
-    feedbackEl.style.color = "green";
-
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const message = document.getElementById("message").value.trim();
-
-    if (!name || !email || !message) {
-      feedbackEl.textContent = "Please fill in all fields.";
-      feedbackEl.style.color = "red";
-      feedbackEl.style.display = "block";
-      return;
-    }
-
-    try {
-      // Use absolute URL for Render
-      const response = await fetch(window.location.origin + "/send_contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message })
-      });
-
-      console.log("Raw response:", response);
-
-      const result = await response.json();
-      console.log("Parsed result:", result);
-
-      if (response.ok) {
-        feedbackEl.textContent = "Your message has been sent! We'll get back to you shortly.";
-        feedbackEl.style.color = "green";
-        feedbackEl.style.display = "block";
-        document.getElementById("contactForm").reset();
-      } else {
-        feedbackEl.textContent = result.error || "Something went wrong. Please try again later.";
-        feedbackEl.style.color = "red";
-        feedbackEl.style.display = "block";
-      }
-    } catch (err) {
-      console.error("Fetch error:", err);
-      feedbackEl.textContent = "An error occurred. Please try again later.";
-      feedbackEl.style.color = "red";
-      feedbackEl.style.display = "block";
-    }
-  });
-  </script>
 </body>
 </html>
