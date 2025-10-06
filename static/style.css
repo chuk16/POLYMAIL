@@ -285,3 +285,34 @@ form .cta {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* --- Responsive Navbar Fix --- */
+.navbar nav {
+  display: flex;
+  gap: 1.5rem; /* space between links */
+  align-items: center;
+  flex-wrap: wrap; /* allows wrapping if screen is tiny */
+}
+
+/* make sure links don't bunch up */
+.navbar nav a {
+  white-space: nowrap;
+}
+
+/* smaller screens */
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar nav {
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .navbar h1 {
+    margin-bottom: 0.5rem;
+  }
+}
