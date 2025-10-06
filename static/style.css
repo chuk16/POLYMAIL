@@ -158,6 +158,14 @@ body {
   gap: 1rem;
 }
 
+/* Center CTA buttons inside forms */
+form .cta {
+  display: block;
+  width: 220px;       /* keeps button size reasonable */
+  margin: 1rem auto;  /* centers the button and adds spacing */
+  text-align: center;
+}
+
 /* INPUT BOX */
 #emailText {
   width: 80%;
