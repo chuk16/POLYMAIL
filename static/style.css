@@ -316,39 +316,27 @@ form .cta {
     margin-bottom: 0.5rem;
   }
 }
-/* --- Hero Section Mobile Fix --- */
-.hero {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 6rem 1.5rem 4rem; /* more top/bottom breathing room */
-  min-height: 100vh; /* ensures hero always fills screen */
-  box-sizing: border-box;
-  text-align: center;
-}
-
-/* Hero text scaling on smaller screens */
-.hero-content h2 {
-  font-size: clamp(1.5rem, 5vw, 2.5rem);
-  line-height: 1.3;
-  margin-bottom: 1rem;
-}
-
-.hero-content p {
-  font-size: clamp(1rem, 3.5vw, 1.25rem);
-  max-width: 700px;
-  margin: 0 auto 1.5rem;
-  line-height: 1.6;
-}
-
-/* Extra small devices (like iPhones SE/mini) */
-@media (max-width: 480px) {
+/* --- Mobile Hero Layout (only affects phones) --- */
+@media (max-width: 600px) {
   .hero {
-    padding-top: 8rem; /* ensure navbar doesn’t overlap hero text */
+    padding-top: 8rem;
+    padding-bottom: 4rem;
+    min-height: 100vh;
+    box-sizing: border-box;
+    text-align: center;
   }
 
   .hero-content {
     padding: 0 1rem;
+  }
+
+  .hero-content h2 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+    line-height: 1.6;
   }
 }
