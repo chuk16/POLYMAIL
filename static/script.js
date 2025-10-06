@@ -52,6 +52,58 @@ document.getElementById("translateForm").addEventListener("submit", async (e) =>
   }
 });
 
+// Contact form handler
+const contactForm = document.getElementById("contactForm");
+if (contactForm) {
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const feedbackEl = document.getElementById("formFeedback");
+    feedbackEl.style.display = "none";
+    feedbackEl.style.color = "green";
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    if (!name || !email || !message) {
+      feedbackEl.textContent = "Please fill in all fields.";
+      feedbackEl.style.color = "red";
+      feedbackEl.style.display = "block";
+      return;
+    }
+
+    try {
+      // Use absolute URL to ensure it works on Render
+      const response = await fetch(window.location.origin + "/send_contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        feedbackEl.textContent = "Your message has been sent! We'll get back to you shortly.";
+        feedbackEl.style.color = "green";
+        feedbackEl.style.display = "block";
+        contactForm.reset();
+      } else {
+        feedbackEl.textContent = result.error || "Something went wrong. Please try again later.";
+        feedbackEl.style.color = "red";
+        feedbackEl.style.display = "block";
+      }
+
+    } catch (err) {
+      feedbackEl.textContent = "An error occurred. Please try again later.";
+      feedbackEl.style.color = "red";
+      feedbackEl.style.display = "block";
+      console.error("Contact form error:", err);
+    }
+  });
+}
+
+
 // Copy output to clipboard
 document.getElementById("copyBtn").addEventListener("click", () => {
   const output = document.getElementById("output").textContent;
