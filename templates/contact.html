@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact PolyMail.ai</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- HERO HEADER -->
+  <header class="hero">
+    <div class="navbar fade-in">
+      <h1 class="logo">PolyMail<span>.ai</span></h1>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </nav>
+    </div>
+
+    <div class="hero-content fade-up">
+      <h2>Contact <span>PolyMail.ai</span></h2>
+      <p>Questions, feedback, or support? Our team is here to help you communicate flawlessly.</p>
+    </div>
+  </header>
+
+  <!-- CONTACT CONTENT -->
+  <section class="translator-section">
+    <h3>Get in Touch</h3>
+    <p style="margin-bottom:2rem;">We’d love to hear from you! Whether you have questions, feedback, or need support, you can reach us here:</p>
+    <p><strong>Email:</strong> polymail.ai@gmail.com</p>
+
+    <h3 style="margin-top:2rem;">Send a Message</h3>
+    <form id="contactForm" style="display:flex; flex-direction:column; gap:1rem; max-width:600px; margin:0 auto;">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <textarea id="message" placeholder="Your Message" required style="height:150px;"></textarea>
+      <button type="submit">Send Message</button>
+      <p id="formFeedback" style="margin-top:0.5rem; color:green; display:none;"></p>
+    </form>
+  </section>
+
+  <!-- AJAX SCRIPT -->
+  <script>
+    document.getElementById("contactForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const feedbackEl = document.getElementById("formFeedback");
+      feedbackEl.style.display = "none";
+      feedbackEl.style.color = "green";
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !email || !message) {
+        feedbackEl.textContent = "Please fill in all fields.";
+        feedbackEl.style.color = "red";
+        feedbackEl.style.display = "block";
+        return;
+      }
+
+      try {
+        const response = await fetch("/send_contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, message })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          feedbackEl.textContent = "Your message has been sent! We'll get back to you shortly.";
+          feedbackEl.style.color = "green";
+          feedbackEl.style.display = "block";
+          // Clear form
+          document.getElementById("contactForm").reset();
+        } else {
+          feedbackEl.textContent = result.error || "Something went wrong. Please try again later.";
+          feedbackEl.style.color = "red";
+          feedbackEl.style.display = "block";
+        }
+      } catch (err) {
+        feedbackEl.textContent = "An error occurred. Please try again later.";
+        feedbackEl.style.color = "red";
+        feedbackEl.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
