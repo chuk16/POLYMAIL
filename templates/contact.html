@@ -43,50 +43,54 @@
 
   <!-- AJAX SCRIPT -->
   <script>
-    document.getElementById("contactForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
+  document.getElementById("contactForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
 
-      const feedbackEl = document.getElementById("formFeedback");
-      feedbackEl.style.display = "none";
-      feedbackEl.style.color = "green";
+    const feedbackEl = document.getElementById("formFeedback");
+    feedbackEl.style.display = "none";
+    feedbackEl.style.color = "green";
 
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const message = document.getElementById("message").value.trim();
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
 
-      if (!name || !email || !message) {
-        feedbackEl.textContent = "Please fill in all fields.";
-        feedbackEl.style.color = "red";
+    if (!name || !email || !message) {
+      feedbackEl.textContent = "Please fill in all fields.";
+      feedbackEl.style.color = "red";
+      feedbackEl.style.display = "block";
+      return;
+    }
+
+    try {
+      // Use absolute URL for Render
+      const response = await fetch(window.location.origin + "/send_contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message })
+      });
+
+      console.log("Raw response:", response);
+
+      const result = await response.json();
+      console.log("Parsed result:", result);
+
+      if (response.ok) {
+        feedbackEl.textContent = "Your message has been sent! We'll get back to you shortly.";
+        feedbackEl.style.color = "green";
         feedbackEl.style.display = "block";
-        return;
-      }
-
-      try {
-        const response = await fetch("/send_contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, message })
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          feedbackEl.textContent = "Your message has been sent! We'll get back to you shortly.";
-          feedbackEl.style.color = "green";
-          feedbackEl.style.display = "block";
-          // Clear form
-          document.getElementById("contactForm").reset();
-        } else {
-          feedbackEl.textContent = result.error || "Something went wrong. Please try again later.";
-          feedbackEl.style.color = "red";
-          feedbackEl.style.display = "block";
-        }
-      } catch (err) {
-        feedbackEl.textContent = "An error occurred. Please try again later.";
+        document.getElementById("contactForm").reset();
+      } else {
+        feedbackEl.textContent = result.error || "Something went wrong. Please try again later.";
         feedbackEl.style.color = "red";
         feedbackEl.style.display = "block";
       }
-    });
+    } catch (err) {
+      console.error("Fetch error:", err);
+      feedbackEl.textContent = "An error occurred. Please try again later.";
+      feedbackEl.style.color = "red";
+      feedbackEl.style.display = "block";
+    }
+  });
   </script>
 </body>
 </html>
